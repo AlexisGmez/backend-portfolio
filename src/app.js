@@ -17,5 +17,8 @@ app.use(express.json());
 app.use(projectsRoutes);
 app.use(habilitiesRoutes);
 app.use(loginRoutes);
+app.get("/", (req, res) => {
+  res.status(200).json("welcome to my porfolio");
+});
 
 export default app;

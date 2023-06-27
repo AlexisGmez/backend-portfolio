@@ -21,15 +21,23 @@ export const login = async (req, resp) => {
 
     const token = generateToken(user.dataValues);
 
-    resp.status(200).json({ token: token });
+    resp.status(200).json({
+      Ok: true,
+      message: "token generated successfully",
+      token: token,
+    });
   } catch (error) {
-    return resp.status(500).json({ message: error.message });
+    return resp.status(500).json({
+      Ok: false,
+      message: error.message,
+    });
   }
 };
 
 export const createUser = async (req, resp) => {
   const { name, password } = req.body;
   const hashedPassword = await bcrypt.hash(password, 10);
+
   const newUser = {
     name,
     password: hashedPassword,
@@ -37,7 +45,6 @@ export const createUser = async (req, resp) => {
 
   try {
     const createNewUser = await Users.create(newUser);
-
     resp.status(200).json(createNewUser);
   } catch (error) {
     return resp.status(500).json({ message: error.message });

@@ -5,7 +5,7 @@ import { Habilities } from "../models/habilities.js";
 
 export const getProjects = async (req, res) => {
   try {
-    const data = await Projects.findAll({
+    const project = await Projects.findAll({
       include: [
         {
           model: Habilities,
@@ -14,9 +14,16 @@ export const getProjects = async (req, res) => {
         },
       ],
     });
-    res.json(data);
+    res.json({
+      Ok: true,
+      message: "list of projects",
+      projects: project,
+    });
   } catch (error) {
-    return res.status(500).json({ message: error.message });
+    return res.status(500).json({
+      Ok: false,
+      message: error.message,
+    });
   }
 };
 
@@ -25,9 +32,16 @@ export const getProjectById = async (req, res) => {
   try {
     const project = await Projects.findByPk(id);
     if (project === null) return res.sendStatus(404);
-    res.status(200).json(project);
+    res.status(200).json({
+      Ok: true,
+      message: "project",
+      project: project,
+    });
   } catch (error) {
-    return res.status(500).json({ message: error.message });
+    return res.status(500).json({
+      Ok: false,
+      message: error.message,
+    });
   }
 };
 
@@ -53,7 +67,11 @@ export const createProject = async (req, res) => {
     if (!Array.isArray(habilities)) {
       const habilidadesExist = await Habilities.findByPk(habilities);
       await newProject.addHabilities(habilidadesExist);
-      return res.json(newProject);
+      return res.json({
+        Ok: true,
+        message: "project created successfully",
+        project: newProject,
+      });
     }
 
     const habilidadesExist = await Promise.all(
@@ -61,9 +79,16 @@ export const createProject = async (req, res) => {
     );
 
     await newProject.addHabilities(habilidadesExist);
-    res.json(newProject);
+    res.json({
+      Ok: true,
+      message: "project created successfully",
+      project: newProject,
+    });
   } catch (error) {
-    return res.status(500).json({ message: error.message });
+    return res.status(500).json({
+      Ok: false,
+      message: error.message,
+    });
   }
 };
 
@@ -78,9 +103,16 @@ export const updateProject = async (req, res) => {
     project.description = description;
 
     await project.save();
-    res.json(project);
+    res.json({
+      Ok: true,
+      message: "project updated successfully",
+      project: project,
+    });
   } catch (error) {
-    return req.status(500).json({ message: error.message });
+    return req.status(500).json({
+      Ok: false,
+      message: error.message,
+    });
   }
 };
 
@@ -94,6 +126,9 @@ export const deleteProject = async (req, res) => {
 
     res.sendStatus(204);
   } catch (error) {
-    return res.status(500).json({ message: error.message });
+    return res.status(500).json({
+      Ok: false,
+      message: error.message,
+    });
   }
 };

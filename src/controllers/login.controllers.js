@@ -27,19 +27,19 @@ export const login = async (req, resp) => {
   }
 };
 
-// export const createUser = async (req, resp) => {
-//   const { name, password } = req.body;
-//   const hashedPassword = await bcrypt.hash(password, 10);
-//   const newUser = {
-//     name,
-//     password: hashedPassword,
-//   };
+export const createUser = async (req, resp) => {
+  const { name, password } = req.body;
+  const hashedPassword = await bcrypt.hash(password, 10);
+  const newUser = {
+    name,
+    password: hashedPassword,
+  };
 
-//   try {
-//     const createNewUser = await Users.create(newUser);
+  try {
+    const createNewUser = await Users.create(newUser);
 
-//     resp.status(200).json(createNewUser);
-//   } catch (error) {
-//     return resp.status(500).json({ message: error.message });
-//   }
-// };
+    resp.status(200).json(createNewUser);
+  } catch (error) {
+    return resp.status(500).json({ message: error.message });
+  }
+};

@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 import { generateToken } from "../utils/generateToken.js";
 
 export const login = async (req, resp) => {
-  const { name, password } = req.body;
+  const { name, password } = req.query;
 
   try {
     const user = await Users.findOne({
@@ -12,12 +12,19 @@ export const login = async (req, resp) => {
       },
     });
 
-    if (user === null) return resp.status(404).json("credenciales invalidas");
+    if (user === null)
+      return resp.status(404).json({
+        Ok: false,
+        message: "credenciales invalidas",
+      });
 
     const isValidPassword = await bcrypt.compare(password, user.password);
 
     if (!isValidPassword)
-      return resp.status(404).json("credenciales invalidas");
+      return resp.status(404).json({
+        Ok: false,
+        message: "credenciales invalidas",
+      });
 
     const token = generateToken(user.dataValues);
 
